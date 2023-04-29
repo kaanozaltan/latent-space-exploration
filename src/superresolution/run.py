@@ -1,3 +1,5 @@
+# Modified from https://github.com/adamian98/pulse
+
 from math import log10, ceil
 
 from torch.utils.data import Dataset, DataLoader
@@ -6,13 +8,13 @@ from pathlib import Path
 from PIL import Image
 import torchvision
 
-from models import Upsampler
+from models import PULSE
 
 
 class Images(Dataset):
     def __init__(self, root_dir, duplicates):
         self.root_path = Path(root_dir)
-        self.image_list = list(self.root_path.glob("*.jpg"))  # change png to jpg
+        self.image_list = list(self.root_path.glob("*.jpg"))
         
         # Number of times to duplicate the image in the dataset to produce multiple HR images
         self.duplicates = duplicates
@@ -39,7 +41,7 @@ out_path.mkdir(parents=True, exist_ok=True)
 
 dataloader = DataLoader(dataset, batch_size=batch_size)
 
-model = Upsampler()
+model = PULSE()
 model = DataParallel(model)
 
 toPIL = torchvision.transforms.ToPILImage()
@@ -55,7 +57,7 @@ for ref_im, ref_im_name in dataloader:
             int_path_LR = Path(out_path / ref_im_name[i] / "LR")
             int_path_HR.mkdir(parents=True, exist_ok=True)
             int_path_LR.mkdir(parents=True, exist_ok=True)
-        for j,(HR,LR) in enumerate(model(ref_im)):  # TODO: what is this returning?
+        for j,(HR,LR) in enumerate(model(ref_im)):
             for i in range(batch_size):
                 toPIL(HR[i].cpu().detach().clamp(0, 1)).save(
                     int_path_HR / f"{ref_im_name[i]}_{j:0{padding}}.png")

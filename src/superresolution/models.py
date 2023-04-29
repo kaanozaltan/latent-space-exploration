@@ -33,10 +33,8 @@ class PULSE(nn.Module):
         #     latent_out = torch.nn.LeakyReLU(5)(self.mapping(latent))
         #     self.gaussian_fit = {"mean": latent_out.mean(0), "std": latent_out.std(0)}
         #     torch.save(self.gaussian_fit, "../models/gaussian_fit.pt")
-        print("upsampler init done")##
 
     def forward(self, ref_im):
-        print("in upsampler forward")##
         loss_str = '100*L2+0.05*GEOCROSS'
         eps = 2e-3
         # can add noise_type
@@ -56,14 +54,14 @@ class PULSE(nn.Module):
 
         for i in range(18):
             res = (batch_size, 1, 2**(i//2+2), 2**(i//2+2))
-            new_noise = torch.randn(res, dtype=torch.float, device='cuda')  # fixed
+            new_noise = torch.randn(res, dtype=torch.float, device='cuda')  # fixed value
             new_noise.requires_grad = False
             noise.append(new_noise)
         
-        var_list = [latent] + noise_vars  # what?
+        var_list = [latent] + noise_vars
         opt_func = torch.optim.Adam
         opt = SphericalOptimizer(opt_func, var_list, lr=learning_rate)
-        schedule_func = lambda x: 1  # fixed
+        schedule_func = lambda x: 1  # fixed value
         scheduler = torch.optim.lr_scheduler.LambdaLR(opt.opt, schedule_func)
 
         loss_builder = LossBuilder(ref_im, loss_str, eps).cuda()
@@ -72,7 +70,6 @@ class PULSE(nn.Module):
         min_l2 = np.inf
         gen_im = None
 
-        print("opt start")##
         for j in range(steps):
             opt.opt.zero_grad()     
             latent_in = latent
@@ -92,7 +89,6 @@ class PULSE(nn.Module):
             if loss_l2 < min_l2:
                 min_l2 = loss_l2
 
-            # what?
             if save_intermediate:
                 yield (best_im.cpu().detach().clamp(0, 1),loss_builder.D(best_im).cpu().detach().clamp(0, 1))
 
@@ -103,7 +99,7 @@ class PULSE(nn.Module):
         if min_l2 <= eps:
             yield (gen_im.clone().cpu().detach().clamp(0, 1),loss_builder.D(best_im).cpu().detach().clamp(0, 1))
         else:
-            print("No suitable face found")
+            print("No suitable face found with loss below epsilon")
 
     def get_name():
         return 'pulse'

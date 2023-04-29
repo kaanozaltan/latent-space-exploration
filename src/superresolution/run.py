@@ -35,8 +35,8 @@ duplicates = 1
 batch_size = 1
 save_intermediate = True
 
-dataset = Images('../samples_in', duplicates=duplicates)
-out_path = Path('../samples_out')
+dataset = Images('../inputs', duplicates=duplicates)
+out_path = Path('../outputs')
 out_path.mkdir(parents=True, exist_ok=True)
 
 dataloader = DataLoader(dataset, batch_size=batch_size)
@@ -46,10 +46,7 @@ model = DataParallel(model)
 
 toPIL = torchvision.transforms.ToPILImage()
 
-print("dataset len:", len(dataset))##
-print("inference loop start")##
 for ref_im, ref_im_name in dataloader:
-    print("taking ref_im")##
     if save_intermediate:
         padding = ceil(log10(100))
         for i in range(batch_size):

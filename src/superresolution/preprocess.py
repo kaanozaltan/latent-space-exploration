@@ -12,4 +12,4 @@ def resize_all(src_path, dst_path, new_width, new_height, quality=75):
             resized_img.save(os.path.join(dst_path, filename).replace('\\', '/'), quality=quality)
 
 
-resize_all('../samples_in_hr', '../samples_in', 256, 256)
+resize_all('../inputs_hr', '../inputs', 32, 32)

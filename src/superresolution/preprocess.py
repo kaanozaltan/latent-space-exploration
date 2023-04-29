@@ -4,6 +4,9 @@ from PIL import Image
 
 
 def resize_all(src_path, dst_path, new_width, new_height, quality=75):
+    if not os.path.exists(dst_path):
+        os.makedirs(dst_path)
+
     for filename in os.listdir(src_path):
         if filename.endswith('.jpg') or filename.endswith('.jpeg') or filename.endswith('.png'):
             img_path = os.path.join(src_path, filename).replace('\\', '/')

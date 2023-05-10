@@ -1,5 +1,6 @@
 # Modified from https://github.com/adamian98/pulse
 
+import math
 from math import log10, ceil
 
 from torch.utils.data import Dataset, DataLoader
@@ -7,8 +8,9 @@ from torch.nn import DataParallel
 from pathlib import Path
 from PIL import Image
 import torchvision
+import numpy as np
 
-from models import PULSE
+from pulse import PULSE
 
 
 class Images(Dataset):
@@ -25,10 +27,17 @@ class Images(Dataset):
     def __getitem__(self, idx):
         img_path = self.image_list[idx//self.duplicates]
         image = torchvision.transforms.ToTensor()(Image.open(img_path))
-        if self.duplicates == 1:
+        if(self.duplicates == 1):
             return image,img_path.stem
         else:
             return image,img_path.stem+f"_{(idx % self.duplicates)+1}"
+
+
+def psnr(outputs, targets):
+    mse = np.mean((outputs - targets) ** 2)
+    if mse == 0:
+        return float('inf')
+    return 20 * math.log10(1.0 / math.sqrt(mse))
 
 
 duplicates = 1
@@ -47,7 +56,7 @@ model = DataParallel(model)
 toPIL = torchvision.transforms.ToPILImage()
 
 for ref_im, ref_im_name in dataloader:
-    if save_intermediate:
+    if(save_intermediate):
         padding = ceil(log10(100))
         for i in range(batch_size):
             int_path_HR = Path(out_path / ref_im_name[i] / "HR")

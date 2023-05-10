@@ -1,5 +1,3 @@
-# Taken from https://github.com/adamian98/pulse
-
 import torch
 from bicubic import BicubicDownSample
 

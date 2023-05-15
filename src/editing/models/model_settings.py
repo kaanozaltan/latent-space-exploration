@@ -32,7 +32,7 @@ MODEL_POOL = {
     },
     'stylegan_celebahq': {
         'tf_model_path':
-            MODEL_DIR + '/karras2019stylegan-celebahq-1024x1024.pkl',
+            '/content/drive/MyDrive/bilkent/cs485/karras2019stylegan-celebahq-1024x1024.pkl',  # CHANGED
         'model_path': MODEL_DIR + '/stylegan_celebahq.pth',
         'gan_type': 'stylegan',
         'dataset_name': 'celebahq',

@@ -10,7 +10,7 @@ from PIL import Image
 import torchvision
 import numpy as np
 
-from models import PULSE
+from pulse import PULSE
 
 
 class Images(Dataset):

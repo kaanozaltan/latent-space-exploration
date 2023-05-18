@@ -116,7 +116,8 @@ class PULSE(nn.Module):
 
             # edit
             direction = np.load('directions/smile.npy')
-            direction = np.tile(direction, (18, 1))
+            direction = np.repeat(direction, 18, axis=0)
+            direction = np.expand_dims(direction, axis=0)
             direction = torch.from_numpy(direction).to('cuda')
             if j == steps - 1:
                 print("SHAPES:", latent_in.shape, direction.shape)

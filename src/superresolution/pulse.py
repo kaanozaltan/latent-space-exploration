@@ -119,13 +119,10 @@ class PULSE(nn.Module):
             direction = np.repeat(direction, 18, axis=0)
             direction = np.expand_dims(direction, axis=0)
             direction = torch.from_numpy(direction).to(torch.float32).to('cuda')
+            alpha = 4
+
             if j == steps - 1:
-                print(j)
-                print("DTYPES:", latent_in.dtype, direction.dtype)
-                print("SHAPES:", latent_in.shape, direction.shape)
-                print("LATENT_IN:", latent_in[0,0])
-                print("DIRECTION:", direction[0,0])
-                latent_in = latent_in + 4 * direction
+                latent_in = latent_in + alpha * direction
                 gen_im = (self.synthesis(latent_in, noise)+1)/2
 
         yield (gen_im.clone().cpu().detach().clamp(0, 1),loss_builder.D(best_im).cpu().detach().clamp(0, 1))

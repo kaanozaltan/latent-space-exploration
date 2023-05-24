@@ -17,19 +17,6 @@ class PULSE(nn.Module):
 
         # mapping only necessary if gaussian_fit.pt does not exist
         # self.mapping = G_mapping().cuda
-        '''
-        self.mapping = G_mapping().cuda()
-        load_model(self.mapping' path)
-        for idx in sample count:
-            z = torch.randn((1,512))
-            w_s=self.mapping(z) # size = 1x512
-            w_s = w_s.unsqueeze(0) # 1x1x512
-            w_s = torch.repeat(w_s, (1,18,1)) # 1x14x512
-            img = G_synthesis(w_s, noise)
-            score = classifier(img)
-            data_pairs.append((w_s, score))
-        '''
-
         self.synthesis = G_synthesis().cuda()
 
         # with open('../models/mapping.pt', 'r') as f:
@@ -115,17 +102,14 @@ class PULSE(nn.Module):
             scheduler.step()
 
             # edit
-            direction = np.load('superresolution/directions/smile.npy')
-            direction = np.repeat(direction, 18, axis=0)
-            direction = np.expand_dims(direction, axis=0)
-            direction = torch.from_numpy(direction).to(torch.float32).to('cuda')
-            alpha = 4
+            # direction = np.load('superresolution/directions/smile.npy')
+            # direction = np.repeat(direction, 18, axis=0)
+            # direction = np.expand_dims(direction, axis=0)
+            # direction = torch.from_numpy(direction).to(torch.float32).to('cuda')
+            # alpha = 4
 
-            if j == steps - 1:
-                latent_in = latent_in + alpha * direction
-                gen_im = (self.synthesis(latent_in, noise)+1)/2
+            # if j == steps - 1:
+            #     latent_in = latent_in + alpha * direction
+            #     gen_im = (self.synthesis(latent_in, noise)+1)/2
 
         yield (gen_im.clone().cpu().detach().clamp(0, 1),loss_builder.D(best_im).cpu().detach().clamp(0, 1))
-
-    def edit(self, direction):
-        pass

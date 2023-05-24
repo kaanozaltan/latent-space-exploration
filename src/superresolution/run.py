@@ -17,8 +17,6 @@ class Images(Dataset):
     def __init__(self, root_dir, duplicates):
         self.root_path = Path(root_dir)
         self.image_list = list(self.root_path.glob("*.jpg"))
-        
-        # Number of times to duplicate the image in the dataset to produce multiple HR images
         self.duplicates = duplicates
 
     def __len__(self):
@@ -31,13 +29,6 @@ class Images(Dataset):
             return image,img_path.stem
         else:
             return image,img_path.stem+f"_{(idx % self.duplicates)+1}"
-
-
-def psnr(outputs, targets):
-    mse = np.mean((outputs - targets) ** 2)
-    if mse == 0:
-        return float('inf')
-    return 20 * math.log10(1.0 / math.sqrt(mse))
 
 
 duplicates = 4

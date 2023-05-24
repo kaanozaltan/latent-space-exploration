@@ -9,6 +9,7 @@ import numpy as np
 from stylegan import G_mapping, G_synthesis
 from optimization import SphericalOptimizer
 from loss import LossBuilder
+import metrics
 
 
 class PULSE(nn.Module):
@@ -112,4 +113,11 @@ class PULSE(nn.Module):
             #     latent_in = latent_in + alpha * direction
             #     gen_im = (self.synthesis(latent_in, noise)+1)/2
 
+        final_im = gen_im.clone().cpu().detach().clamp(0, 1)
+        print("final_im range:", torch.min(final_im), torch.max(final_im))
+        print("ref_im range:", torch.min(ref_im), torch.max(ref_im))
+        # print("Metrics:")
+        # print("PSNR:", metrics.psnr(gen_im, ref_im))
+        # print("SSIM:", metrics.ssim(gen_im, ref_im))
+        # print("LPIPS:", metrics.lpips(gen_im, ref_im))
         yield (gen_im.clone().cpu().detach().clamp(0, 1),loss_builder.D(best_im).cpu().detach().clamp(0, 1))

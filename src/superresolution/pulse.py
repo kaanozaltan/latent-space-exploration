@@ -75,6 +75,10 @@ class PULSE(nn.Module):
             latent_in = self.lrelu(latent_in*self.gaussian_fit["std"] + self.gaussian_fit["mean"])
             gen_im = (self.synthesis(latent_in, noise)+1)/2
 
+            # if j == steps - 1:
+            #     latent_in = np.load('latent.npy')
+            #     gen_im = (self.synthesis(latent_in, noise)+1)/2
+
             loss, loss_dict = loss_builder(latent_in, gen_im)
             loss_dict['TOTAL'] = loss
 
@@ -104,6 +108,9 @@ class PULSE(nn.Module):
             # if j == steps - 1:
             #     latent_in = latent_in + alpha * direction
             #     gen_im = (self.synthesis(latent_in, noise)+1)/2
+
+            if j == steps - 1:
+                np.save('latent.npy', latent_in)
 
         # output = gen_im.clone().cpu().detach().clamp(0, 1)
         # target = ref_im.clone().cpu().detach().clamp(0, 1)

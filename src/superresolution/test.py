@@ -3,8 +3,6 @@ import torch
 from PIL import Image
 from torchvision import transforms
 
-transform = transforms.ToTensor()
-path = '../../inputs_original/272.jpg'
-input_img = transform(Image.open(path))
-print("img range:", torch.min(input_img), torch.max(input_img))
-print("img shape:", input_img.shape)
+# np.save("arr.npy", np.array([1,2,3]))
+arr = np.load("arr.npy")
+print(arr)

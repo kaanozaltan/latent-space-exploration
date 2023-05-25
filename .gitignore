@@ -1,3 +1,6 @@
 __pycache__/
 CelebAMask-HQ/
 dataset/
+inputs_original/
+inputs/
+outputs/

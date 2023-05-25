@@ -24,6 +24,7 @@ def train(model, device, train_loader, criterion, optimizer, num_epochs):
 
             optimizer.zero_grad()
             outputs = model(inputs)
+            
             loss = criterion(outputs, targets)
             loss.backward()
             optimizer.step()
@@ -32,14 +33,14 @@ def train(model, device, train_loader, criterion, optimizer, num_epochs):
         epoch_loss = running_loss / len(train_dataset)
         print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, epoch_loss))
 
-    torch.save(model.state_dict(), f'../models/{model_name}.pt')
+    torch.save(model.state_dict(), f'../../models/{model_name}.pt')
 
 
 torch.cuda.empty_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print("Device:", device)
 
-train_dataset = SRDataset('../dataset/train/lr', '../dataset/train/hr', transform=transforms.ToTensor())
+train_dataset = SRDataset('../../dataset/train/lr', '../../dataset/train/hr', transform=transforms.ToTensor())
 train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 
 # model, criterion = SRCNN(), nn.MSELoss()

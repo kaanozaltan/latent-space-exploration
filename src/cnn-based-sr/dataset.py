@@ -25,3 +25,4 @@ class SRDataset(Dataset):
             hr_img = self.transform(hr_img)
 
         return lr_img, hr_img
+    

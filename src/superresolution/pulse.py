@@ -76,7 +76,7 @@ class PULSE(nn.Module):
             gen_im = (self.synthesis(latent_in, noise)+1)/2
 
             # if j == steps - 1:
-            #     latent_in = np.load('latent.npy')
+            #     latent_in = torch.load('latent.pt')
             #     gen_im = (self.synthesis(latent_in, noise)+1)/2
 
             loss, loss_dict = loss_builder(latent_in, gen_im)
@@ -110,7 +110,7 @@ class PULSE(nn.Module):
             #     gen_im = (self.synthesis(latent_in, noise)+1)/2
 
             if j == steps - 1:
-                np.save('latent.npy', latent_in)
+                torch.save(latent_in, 'latent.pt')
 
         # output = gen_im.clone().cpu().detach().clamp(0, 1)
         # target = ref_im.clone().cpu().detach().clamp(0, 1)

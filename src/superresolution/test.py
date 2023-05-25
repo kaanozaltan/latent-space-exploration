@@ -1,12 +1,10 @@
 import numpy as np
 import torch
+from PIL import Image
+from torchvision import transforms
 
-direction = np.load('directions/smile.npy')
-# print(direction[0])
-direction = np.repeat(direction, 18, axis=0)
-# print(direction[4])
-direction = np.expand_dims(direction, axis=0)
-# print(direction[0,0])
-direction = torch.from_numpy(direction).to(torch.float32)
-# print(direction.shape)
-# print(direction[0,0])
+transform = transforms.ToTensor()
+path = '../../inputs_original/272.jpg'
+input_img = transform(Image.open(path))
+print("img range:", torch.min(input_img), torch.max(input_img))
+print("img shape:", input_img.shape)

@@ -57,11 +57,11 @@ transform = transforms.ToTensor()
 # print("Average LPIPS:", lpips_sum / len(input_files))
 
 path1 = '../../inputs/272.jpg'
-path2 = '../../outputs/272.png'
+path2 = '../../outputs/272.jpg'
 img1 = transform(Image.open(path1))
 img2 = transform(Image.open(path2))
 print("img range:", torch.min(img1), torch.max(img1))
 print("img shape:", img1.shape)
 print("PSNR:", get_psnr(img1, img2))
-print("SSIM:", get_ssim(img1, img1))
-# print("LPIPS:", get_lpips(img1, img2))
+print("SSIM:", get_ssim(img1, img2))
+print("LPIPS:", get_lpips(img1, img2))

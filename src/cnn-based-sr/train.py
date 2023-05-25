@@ -51,6 +51,6 @@ train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
 # optimizer = optim.Adam(model.parameters(), lr=1e-3)
 # train(model, device, train_loader, criterion, optimizer, num_epochs=100)
 
-model, criterion = EDSR(), nn.L1Loss()
+model, criterion = EDSR(), nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=1e-4)
 train(model, device, train_loader, criterion, optimizer, num_epochs=100)

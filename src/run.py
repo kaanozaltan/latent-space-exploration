@@ -16,11 +16,11 @@ from pulse import PULSE
 class Images(Dataset):
     def __init__(self, root_dir, duplicates):
         self.root_path = Path(root_dir)
-        self.image_list = list(self.root_path.glob("*.jpg"))
+        self.image_list = list(self.root_path.glob('*.jpg'))
         self.duplicates = duplicates
 
     def __len__(self):
-        return self.duplicates*len(self.image_list)
+        return self.duplicates * len(self.image_list)
 
     def __getitem__(self, idx):
         img_path = self.image_list[idx//self.duplicates]
@@ -28,7 +28,7 @@ class Images(Dataset):
         if self.duplicates == 1:
             return image,img_path.stem
         else:
-            return image,img_path.stem+f"_{(idx % self.duplicates)+1}"
+            return image,img_path.stem + f'_{(idx % self.duplicates)+1}'
 
 
 duplicates = 4
@@ -47,18 +47,18 @@ model = DataParallel(model)
 toPIL = torchvision.transforms.ToPILImage()
 
 for ref_im, ref_im_name in dataloader:
-    if(save_intermediate):
+    if save_intermediate:
         padding = ceil(log10(100))
         for i in range(batch_size):
             int_path_HR = Path(out_path / ref_im_name[i] / "HR")
             int_path_LR = Path(out_path / ref_im_name[i] / "LR")
             int_path_HR.mkdir(parents=True, exist_ok=True)
             int_path_LR.mkdir(parents=True, exist_ok=True)
-        for j,(HR,LR) in enumerate(model(ref_im, save_intermediate)):
+        for j, (HR,LR) in enumerate(model(ref_im, save_intermediate)):
             for i in range(batch_size):
-                toPIL(HR[i].cpu().detach().clamp(0, 1)).save(int_path_HR / f"{ref_im_name[i]}_{j:0{padding}}.jpg")
-                toPIL(LR[i].cpu().detach().clamp(0, 1)).save(int_path_LR / f"{ref_im_name[i]}_{j:0{padding}}.jpg")
+                toPIL(HR[i].cpu().detach().clamp(0, 1)).save(int_path_HR/f"{ref_im_name[i]}_{j:0{padding}}.jpg")
+                toPIL(LR[i].cpu().detach().clamp(0, 1)).save(int_path_LR/f"{ref_im_name[i]}_{j:0{padding}}.jpg")
     else:
-        for j,(HR,LR) in enumerate(model(ref_im, save_intermediate)):
+        for j, (HR,LR) in enumerate(model(ref_im, save_intermediate)):
             for i in range(batch_size):
                 toPIL(HR[i].cpu().detach().clamp(0, 1)).save(out_path / f"{ref_im_name[i]}.jpg")

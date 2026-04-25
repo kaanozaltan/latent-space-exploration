@@ -1,2 +1,2 @@
 # Latent Space Exploration
-Bilkent University CS 485 Deep Generative Networks project. Adapted from [PULSE](https://github.com/adamian98/pulse).
+Multi-modal super-resolution using StyleGAN2 latent space. Adapted from [PULSE](https://github.com/adamian98/pulse).

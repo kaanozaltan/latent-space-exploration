@@ -1,18 +1,18 @@
 import math
 import os
 
-import torch
 import lpips
-from torchvision import transforms
-from skimage.metrics import structural_similarity as ssim
+import torch
 from PIL import Image
+from skimage.metrics import structural_similarity as ssim
+from torchvision import transforms
 
 
 def get_psnr(output, target):
     max_pixel = 1.0
-    mse = torch.mean((output-target)**2)
+    mse = torch.mean((output - target) ** 2)
     if mse == 0:
-        return float('inf')
+        return float("inf")
     return 20 * math.log10(max_pixel / torch.sqrt(mse))
 
 
@@ -25,7 +25,7 @@ def get_ssim(output, target):
 def get_lpips(output, target):
     output = output * 2 - 1
     target = target * 2 - 1
-    loss_fn_vgg = lpips.LPIPS(net='vgg')
+    loss_fn_vgg = lpips.LPIPS(net="vgg")
     return loss_fn_vgg(output, target).item()
 
 
@@ -54,7 +54,8 @@ def calculate_metrics(output_dir, target_dir):
     return avg_psnr, avg_ssim, avg_lpips
 
 
-avg_psnr, avg_ssim, avg_lpips = calculate_metrics('../outputs', '../targets')
-print("Average PSNR:", avg_psnr)
-print("Average SSIM:", avg_ssim)
-print("Average LPIPS:", avg_lpips)
+if __name__ == "__main__":
+    avg_psnr, avg_ssim, avg_lpips = calculate_metrics("outputs", "targets")
+    print("Average PSNR:", avg_psnr)
+    print("Average SSIM:", avg_ssim)
+    print("Average LPIPS:", avg_lpips)

@@ -2,3 +2,5 @@ __pycache__/
 inputs_original/
 inputs/
 outputs/
+models/
+dataset/
